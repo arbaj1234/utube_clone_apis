@@ -1,0 +1,12 @@
+user apis
+
+register user apis
+
+curl:
+curl --location 'http://localhost:3000/user/ragister' \
+--form 'userName="\"arbajshaikh\""' \
+--form 'channelName="\"jioTV\""' \
+--form 'email="\"arbaj@gmail.com\""' \
+--form 'password="\"123333564\""' \
+--form 'phone="68972672"' \
+--form 'logo=@"/C:/Users/Admin/Pictures/Screenshots/Screenshot (716).png"'
