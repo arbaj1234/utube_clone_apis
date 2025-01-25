@@ -40,5 +40,36 @@ export const registerUser = async (req, res, next) => {
 
 };
 
-export const loginUser = () => { };
+export const loginUser = async (req, res, next) => {
+
+    try {
+        // checking if the user is there
+        const user = await UserModel.findOne({ email: req.body.email }).select('logo userName channelName subscribers password')
+        if (!user) {
+            return res.status(400).json({ message: 'User not found' })
+        }
+
+
+        // verify the password
+        const isMatch = await bcrypt.compare(req.body.password, user.password)
+        if (!isMatch) {
+            return res.status(400).json({ message: "Invalid Credentials" })
+        }
+        user.password = undefined
+
+        // token
+        const token = generateToken(user)
+        res.cookie("token", token).status(200).json({
+            messsage: `Welcome ${user.userName}`,
+            token,
+            user,
+        })
+
+
+    } catch (error) {
+
+        next(error);
+    }
+
+};
 
