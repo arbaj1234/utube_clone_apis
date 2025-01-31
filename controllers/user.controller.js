@@ -3,6 +3,8 @@ import cloudinary from "../config/cloudinary.config.js";
 import UserModel from '../model/user.model.js'
 import fs from 'fs'
 import bcrypt from 'bcrypt'
+import { generateToken } from "../helper/generateToken.js";
+// generateToken
 
 export const registerUser = async (req, res, next) => {
     try {
@@ -25,7 +27,7 @@ export const registerUser = async (req, res, next) => {
             userName: req.body.userName,
             phone: req.body.phone,
             email: req.body.email,
-            password: req.body.password,
+            password:hashPassword ,
             logo: logo
         })
         await newUser.save();
@@ -44,7 +46,8 @@ export const loginUser = async (req, res, next) => {
 
     try {
         // checking if the user is there
-        const user = await UserModel.findOne({ email: req.body.email }).select('logo userName channelName subscribers password')
+        const user = await UserModel.findOne({ email: req.body.email })
+        console.log('object' , user);
         if (!user) {
             return res.status(400).json({ message: 'User not found' })
         }
